@@ -1,14 +1,12 @@
-# Use official OpenJDK image
-FROM openjdk:25-jdk-slim
-
-# Set working directory
+# Stage 1: Build
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copy the built JAR into the container
-COPY target/*.jar app.jar
-
-# Expose port 8080
+# Stage 2: Run
+FROM openjdk:21-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Run the app
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
