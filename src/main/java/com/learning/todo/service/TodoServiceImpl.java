@@ -34,7 +34,6 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Todo updateTodo(Long id, Todo newTodo) {
         Todo todo = getTodoById(id);
-        todo.setTitle(newTodo.getTitle());
         todo.setDescription(newTodo.getDescription());
         todo.setCompleted(newTodo.isCompleted());
         return todoRepository.save(todo);
